@@ -1,5 +1,7 @@
 package com.smallworld;
 
+import com.smallworld.data.Beneficiary;
+import com.smallworld.data.Issue;
 import com.smallworld.data.Sender;
 import com.smallworld.data.Transaction;
 import com.smallworld.repository.TransactionRepository;
@@ -10,9 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.unitils.reflectionassert.ReflectionAssert;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ExtendWith(MockitoExtension.class)
 public class TransactionDataFetcherTest {
@@ -40,6 +45,18 @@ public class TransactionDataFetcherTest {
         Assertions.assertEquals(20.5, transactionDataFetcher.getMaxTransactionAmount());
     }
 
+    @Test
+    void shouldCountUniqueClients(){
+        Mockito.when(transactionRepository.findAll()).thenReturn(getTransactions());
+        Assertions.assertEquals(2, transactionDataFetcher.countUniqueClients());
+    }
+
+    @Test
+    void shouldCheckComplianceIssueOpened(){
+        Mockito.when(transactionRepository.findAll()).thenReturn(getTransactions());
+        Assertions.assertTrue(transactionDataFetcher.hasOpenComplianceIssues("raza"));
+    }
+
     /**
      * Mocking transactional data
      *
@@ -54,7 +71,18 @@ public class TransactionDataFetcherTest {
         sender.setFullName("raza");
         sender.setAge(25);
         transaction.setSender(sender);
+        Beneficiary beneficiary = new Beneficiary();
+        beneficiary.setFullName("haider");
+        beneficiary.setAge(23);
+        transaction.setBeneficiary(beneficiary);
+        Issue issue = new Issue();
+        issue.setId(1L);
+        issue.setSolved(Boolean.TRUE);
+        issue.setMessage("Not good");
+        transaction.setIssue(issue);
         transactions.add(transaction);
+
+        // new transaction
         transaction = new Transaction();
         transaction.setTransactionId(2L);
         transaction.setAmount(20.5);
@@ -62,6 +90,15 @@ public class TransactionDataFetcherTest {
         sender.setFullName("raza");
         sender.setAge(25);
         transaction.setSender(sender);
+        beneficiary = new Beneficiary();
+        beneficiary.setFullName("haider");
+        beneficiary.setAge(23);
+        transaction.setBeneficiary(beneficiary);
+        issue = new Issue();
+        issue.setId(2L);
+        issue.setSolved(Boolean.FALSE);
+        issue.setMessage("Not good");
+        transaction.setIssue(issue);
         transactions.add(transaction);
         return transactions;
     }
