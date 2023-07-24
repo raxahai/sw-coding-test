@@ -1,5 +1,6 @@
 package com.smallworld;
 
+import com.smallworld.data.Sender;
 import com.smallworld.data.Transaction;
 import com.smallworld.repository.TransactionRepository;
 import org.junit.jupiter.api.Assertions;
@@ -9,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,12 @@ public class TransactionDataFetcherTest {
         Assertions.assertEquals(25.0, transactionDataFetcher.getTotalTransactionAmount());
     }
 
+    @Test
+    void shouldGetTotalTransactionAmountSentBySender(){
+        Mockito.when(transactionRepository.findAll()).thenReturn(getTransactions());
+        Assertions.assertEquals(25.0, transactionDataFetcher.getTotalTransactionAmountSentBy("raza"));
+    }
+
     /**
      * Mocking transactional data
      *
@@ -38,10 +44,18 @@ public class TransactionDataFetcherTest {
         Transaction transaction = new Transaction();
         transaction.setTransactionId(1L);
         transaction.setAmount(12.5);
+        Sender sender = new Sender();
+        sender.setFullName("raza");
+        sender.setAge(25);
+        transaction.setSender(sender);
         transactions.add(transaction);
         transaction = new Transaction();
         transaction.setTransactionId(2L);
         transaction.setAmount(12.5);
+        sender = new Sender();
+        sender.setFullName("raza");
+        sender.setAge(25);
+        transaction.setSender(sender);
         transactions.add(transaction);
         return transactions;
     }

@@ -31,7 +31,11 @@ public class TransactionDataFetcher {
      * Returns the sum of the amounts of all transactions sent by the specified client
      */
     public double getTotalTransactionAmountSentBy(String senderFullName) {
-        throw new UnsupportedOperationException();
+        List<Transaction> transactions = transactionRepository.findAll();
+        return transactions.stream()
+                .filter(transaction -> transaction.getSender().getFullName().equals(senderFullName))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
     }
 
     /**
