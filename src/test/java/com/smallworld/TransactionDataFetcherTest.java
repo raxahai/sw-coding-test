@@ -25,13 +25,19 @@ public class TransactionDataFetcherTest {
     @Test
     void shouldGetTotalTransactionAmount(){
         Mockito.when(transactionRepository.findAll()).thenReturn(getTransactions());
-        Assertions.assertEquals(25.0, transactionDataFetcher.getTotalTransactionAmount());
+        Assertions.assertEquals(33.0, transactionDataFetcher.getTotalTransactionAmount());
     }
 
     @Test
     void shouldGetTotalTransactionAmountSentBySender(){
         Mockito.when(transactionRepository.findAll()).thenReturn(getTransactions());
-        Assertions.assertEquals(25.0, transactionDataFetcher.getTotalTransactionAmountSentBy("raza"));
+        Assertions.assertEquals(33.0, transactionDataFetcher.getTotalTransactionAmountSentBy("raza"));
+    }
+
+    @Test
+    void shouldGetMaxTransactionAmount(){
+        Mockito.when(transactionRepository.findAll()).thenReturn(getTransactions());
+        Assertions.assertEquals(20.5, transactionDataFetcher.getMaxTransactionAmount());
     }
 
     /**
@@ -51,7 +57,7 @@ public class TransactionDataFetcherTest {
         transactions.add(transaction);
         transaction = new Transaction();
         transaction.setTransactionId(2L);
-        transaction.setAmount(12.5);
+        transaction.setAmount(20.5);
         sender = new Sender();
         sender.setFullName("raza");
         sender.setAge(25);

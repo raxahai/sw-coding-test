@@ -5,10 +5,7 @@ import com.smallworld.repository.TransactionRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class TransactionDataFetcher {
@@ -42,7 +39,10 @@ public class TransactionDataFetcher {
      * Returns the highest transaction amount
      */
     public double getMaxTransactionAmount() {
-        throw new UnsupportedOperationException();
+        List<Transaction> transactions = transactionRepository.findAll();
+        return transactions.stream()
+                .max(Comparator.comparingDouble(Transaction::getAmount))
+                .get().getAmount();
     }
 
     /**
