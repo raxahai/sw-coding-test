@@ -1,18 +1,30 @@
 package com.smallworld;
 
 import com.smallworld.data.Transaction;
+import com.smallworld.repository.TransactionRepository;
+import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+@Service
 public class TransactionDataFetcher {
+
+    private final TransactionRepository transactionRepository;
+
+    public TransactionDataFetcher(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
+    }
 
     /**
      * Returns the sum of the amounts of all transactions
      */
     public double getTotalTransactionAmount() {
-        throw new UnsupportedOperationException();
+        List<Transaction> transactions = transactionRepository.findAll();
+        return transactions.stream().mapToDouble(Transaction::getAmount).sum();
     }
 
     /**
