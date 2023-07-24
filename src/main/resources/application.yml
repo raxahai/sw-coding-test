@@ -1,0 +1,6 @@
+server:
+  port: 8181
+
+datasource:
+  json:
+    file-location: ${JSON_FILE_LOCATION:transactions.json}
