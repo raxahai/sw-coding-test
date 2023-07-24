@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class Beneficiary {
     private String fullName;
-    private Byte age;
+    private Integer age;
 }
